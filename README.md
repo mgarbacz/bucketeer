@@ -1,4 +1,4 @@
-s3-committer
+Bucketeer
 ============
 
-Commits code to Amazon's S3 storage
+Commits files to Amazon's S3 storage
