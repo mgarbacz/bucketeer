@@ -2,6 +2,7 @@
 *.py[cod]
 MANIFEST
 dist
+Bucketeer.egg-info
 
 # Vim swap file
 *.swp
