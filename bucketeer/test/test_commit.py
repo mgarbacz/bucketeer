@@ -1,4 +1,5 @@
 import unittest
+from bucketeer import commit
 
 class BuckeeterTest(unittest.TestCase):
 
@@ -11,7 +12,7 @@ class BuckeeterTest(unittest.TestCase):
     return
 
   def testMain(self):
-    self.assertTrue(main)
+    self.assertTrue(commit)
 
 if __name__ == '__main__':
   unittest.main()
