@@ -1,2 +1,7 @@
+# Generated python files
 *.py[cod]
+MANIFEST
+dist
+
+# Vim swap file
 *.swp
