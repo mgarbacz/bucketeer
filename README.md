@@ -4,6 +4,9 @@ Bucketeer
 Commits files to Amazon's S3 storage
 
 
-###Usage:
+###Usage
 
 `python bucketeer.py <bucket-name> <containing-folder>`
+
+###License
+[MIT License](LICENSE.md)
