@@ -20,25 +20,25 @@ def commit_to_s3(bucket_name, src_folder):
       print 'Bucket ' + bucket_name + ' not found. Creating...'
       bucket = connection.create_bucket(bucket_name)
       print 'Bucket ' + bucket_name + ' created.'
-    else:
-      # Iterating over all files in the web-content folder
-      for directory, subdirectories, files in os.walk(src_folder):
-        for filename in files:
-          # We want the path to get each file
-          local_file_path = os.path.join(directory, filename)
-          # For s3, we don't want the 'public' part of file path
-          s3_file_path = local_file_path[len(src_folder)+1:]
 
-          remote_file = bucket.get_key(s3_file_path)
+    # Iterating over all files in the web-content folder
+    for directory, subdirectories, files in os.walk(src_folder):
+      for filename in files:
+        # We want the path to get each file
+        local_file_path = os.path.join(directory, filename)
+        # For s3, we don't want the 'public' part of file path
+        s3_file_path = local_file_path[len(src_folder)+1:]
 
-          print filename + ' is uploading...'
-          key_file = boto.s3.key.Key(bucket)
-          key_file.key = s3_file_path
-          key_file.set_contents_from_filename(local_file_path)
-          key_file.make_public()
+        remote_file = bucket.get_key(s3_file_path)
 
-          # Will print after update or if no update was required
-          print filename + ' is up to date.'
+        print filename + ' is uploading...'
+        key_file = boto.s3.key.Key(bucket)
+        key_file.key = s3_file_path
+        key_file.set_contents_from_filename(local_file_path)
+        key_file.make_public()
+
+        # Will print after update or if no update was required
+        print filename + ' is up to date.'
 
     # If we got here with no exceptions, changes have been committed
     success = True
