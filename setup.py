@@ -7,7 +7,7 @@ setup(
   author_email='mich.garbacz+dev@gmail.com',
   packages=['bucketeer',],
   license='MIT License',
-  description='Commits files to Amazon\'s S3 storage',
+  description='Syncs a directory to a bucket in Amazon\'s S3 storage',
   long_description=open('README.md').read(),
   install_requires=[
     "boto == 2.6.0",
