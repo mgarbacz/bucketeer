@@ -10,8 +10,9 @@ class BuckeeterTest(unittest.TestCase):
   test_file = 'bucketeer_test_file'
 
   def setUp(self):
-    # Create a bucket to test on existing bucket
     connection = boto.connect_s3()
+
+    # Create a bucket to test on existing bucket
     bucket = connection.create_bucket(existing_bucket)
 
     # Create directory to house test files
@@ -23,8 +24,14 @@ class BuckeeterTest(unittest.TestCase):
     return
 
   def tearDown(self):
-    # Remove bucket created to test on existing bucket
     connection = boto.connect_s3()
+
+    # Remove all files uploaded to s3
+    bucket = connection.get_bucket(existing_bucket)
+    for s3_file in bucket.list():
+      bucket.delete_key(s3_file.key)
+
+    # Remove bucket created to test on existing bucket
     bucket = connection.delete_bucket(existing_bucket)
 
     # Remove test file
@@ -37,6 +44,7 @@ class BuckeeterTest(unittest.TestCase):
 
   def testMain(self):
     self.assertTrue(commit)
+
 
 if __name__ == '__main__':
   unittest.main()
