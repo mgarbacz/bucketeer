@@ -3,6 +3,7 @@ from bucketeer import commit
 
 class BuckeeterTest(unittest.TestCase):
 
+  # Constants - TODO move to config file
   global existing_bucket, test_dir, test_file
   existing_bucket = 'bucket.exists'
   test_dir = 'bucketeer_test_dir'
@@ -15,6 +16,7 @@ class BuckeeterTest(unittest.TestCase):
 
     # Create directory to house test files
     os.makedirs(test_dir)
+
     # Create test file
     open(test_dir + '/' + test_file, 'w').close()
 
