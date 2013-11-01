@@ -32,7 +32,7 @@ class BuckeeterTest(unittest.TestCase):
       bucket.delete_key(s3_file.key)
 
     # Remove bucket created to test on existing bucket
-    bucket = connection.delete_bucket(existing_bucket)
+    connection.delete_bucket(existing_bucket)
 
     # Remove test file
     os.remove(test_dir + '/' + test_file)
