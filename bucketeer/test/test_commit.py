@@ -45,7 +45,7 @@ class BuckeeterTest(unittest.TestCase):
   def testMain(self):
     self.assertTrue(commit)
 
-  def testNewFileUploadExistingBucket(self):
+  def testNewFileUploadToExistingBucket(self):
     result = commit.commit_to_s3(existing_bucket, test_dir)
     self.assertTrue(result)
 
