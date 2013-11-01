@@ -47,4 +47,6 @@ def commit_to_s3(bucket_name, src_folder):
   except Exception, e:
     print e
 
-  return print_result('Changes', 'committed', success)
+  print_result('Changes', 'committed', success)
+
+  return success
