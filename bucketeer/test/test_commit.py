@@ -4,8 +4,9 @@ from bucketeer import commit
 class BuckeeterTest(unittest.TestCase):
 
   # Constants - TODO move to config file
-  global existing_bucket, test_dir, test_file
+  global existing_bucket, new_bucket, test_dir, test_file
   existing_bucket = 'bucket.exists'
+  new_bucket = 'bucket.new'
   test_dir = 'bucketeer_test_dir'
   test_file = 'bucketeer_test_file'
 
@@ -48,6 +49,17 @@ class BuckeeterTest(unittest.TestCase):
   def testNewFileUploadToExistingBucket(self):
     result = commit.commit_to_s3(existing_bucket, test_dir)
     self.assertTrue(result)
+
+  def testNewFileUploadToNewBucket(self):
+    result = commit.commit_to_s3(new_bucket, test_dir)
+    self.assertTrue(result)
+
+    # Tear down the upload
+    connection = boto.connect_s3()
+    bucket = connection.get_bucket(new_bucket)
+    for s3_file in bucket.list():
+      bucket.delete_key(s3_file.key)
+    connection.delete_bucket(new_bucket)
 
 if __name__ == '__main__':
   unittest.main(buffer = True)
