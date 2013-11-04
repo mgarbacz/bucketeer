@@ -25,15 +25,8 @@ class BuckeeterTest(unittest.TestCase):
     return
 
   def tearDown(self):
-    connection = boto.connect_s3()
-
-    # Remove all files uploaded to s3
-    bucket = connection.get_bucket(existing_bucket)
-    for s3_file in bucket.list():
-      bucket.delete_key(s3_file.key)
-
-    # Remove bucket created to test on existing bucket
-    connection.delete_bucket(existing_bucket)
+    # Remove the bucket created for testing
+    self.remove_bucket(existing_bucket)
 
     # Remove test file
     os.remove(test_dir + '/' + test_file)
@@ -42,6 +35,17 @@ class BuckeeterTest(unittest.TestCase):
     os.rmdir(test_dir)
 
     return
+
+  def remove_bucket(self, bucket_name):
+    connection = boto.connect_s3()
+
+    # Delete all files in the bucket
+    bucket = connection.get_bucket(bucket_name)
+    for s3_file in bucket.list():
+      bucket.delete_key(s3_file.key)
+
+    # Delete the bucket
+    connection.delete_bucket(bucket_name)
 
   def test_main(self):
     self.assertTrue(commit)
@@ -55,11 +59,7 @@ class BuckeeterTest(unittest.TestCase):
     self.assertTrue(result)
 
     # Tear down the upload
-    connection = boto.connect_s3()
-    bucket = connection.get_bucket(new_bucket)
-    for s3_file in bucket.list():
-      bucket.delete_key(s3_file.key)
-    connection.delete_bucket(new_bucket)
+    self.remove_bucket(new_bucket)
 
 if __name__ == '__main__':
   unittest.main(buffer = True)
