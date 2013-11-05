@@ -34,6 +34,12 @@ class BuckeeterTest(unittest.TestCase):
 
     return
 
+  def check_file_uploaded(self, bucket_name, file_name):
+    bucket = self.connection.get_bucket(bucket_name)
+    s3_file = bucket.get_key(file_name)
+
+    return s3_file.name == file_name
+
   def remove_bucket(self, bucket_name):
     # Delete all files in the bucket
     bucket = self.connection.get_bucket(bucket_name)
@@ -56,6 +62,17 @@ class BuckeeterTest(unittest.TestCase):
 
     # Tear down the upload
     self.remove_bucket(self.new_bucket)
+
+  def test_multiple_file_upload(self):
+    # Create second file
+    open(self.test_dir + '/' + self.test_file + '2', 'w').close()
+
+    result = commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    self.assertTrue(result)
+
+    # Remove second file
+    os.remove(self.test_dir + '/' + self.test_file + '2')
+
 
 if __name__ == '__main__':
   unittest.main(buffer = True)
