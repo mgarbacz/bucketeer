@@ -56,14 +56,16 @@ class BuckeeterTest(unittest.TestCase):
     self.assertTrue(commit)
 
   def test_new_file_upload_to_existing_bucket(self):
+    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+
     # True if commit to s3 was successful, False if not
-    result = commit.commit_to_s3(self.existing_bucket, self.test_dir)
     self.assertTrue(self.check_file_on_s3(self.existing_bucket, self.test_file))
 
   def test_new_file_upload_to_new_bucket(self):
+    commit.commit_to_s3(self.new_bucket, self.test_dir)
+
     # True if commit to s3 was successful, False if not
-    result = commit.commit_to_s3(self.new_bucket, self.test_dir)
-    self.assertTrue(result)
+    self.assertTrue(self.check_file_on_s3(self.new_bucket, self.test_file))
 
     # Tear down the newly created bucket
     self.remove_bucket(self.new_bucket)
@@ -72,9 +74,12 @@ class BuckeeterTest(unittest.TestCase):
     # Create a second test file
     open(self.test_dir + '/' + self.test_file + '2', 'w').close()
 
+    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+
     # True if commit to s3 was successful, False if not
-    result = commit.commit_to_s3(self.existing_bucket, self.test_dir)
-    self.assertTrue(result)
+    self.assertTrue(self.check_file_on_s3(self.existing_bucket, self.test_file))
+    self.assertTrue(self.check_file_on_s3(self.existing_bucket,
+                                          self.test_file + '2'))
 
     # Remove the second test file locally
     os.remove(self.test_dir + '/' + self.test_file + '2')
