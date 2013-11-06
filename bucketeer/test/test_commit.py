@@ -52,27 +52,31 @@ class BuckeeterTest(unittest.TestCase):
     self.connection.delete_bucket(bucket_name)
 
   def test_main(self):
+    # True if module loaded successfully, False if not
     self.assertTrue(commit)
 
   def test_new_file_upload_to_existing_bucket(self):
+    # True if commit to s3 was successful, False if not
     result = commit.commit_to_s3(self.existing_bucket, self.test_dir)
     self.assertTrue(self.check_file_on_s3(self.existing_bucket, self.test_file))
 
   def test_new_file_upload_to_new_bucket(self):
+    # True if commit to s3 was successful, False if not
     result = commit.commit_to_s3(self.new_bucket, self.test_dir)
     self.assertTrue(result)
 
-    # Tear down the upload
+    # Tear down the newly created bucket
     self.remove_bucket(self.new_bucket)
 
   def test_multiple_file_upload(self):
-    # Create second file
+    # Create a second test file
     open(self.test_dir + '/' + self.test_file + '2', 'w').close()
 
+    # True if commit to s3 was successful, False if not
     result = commit.commit_to_s3(self.existing_bucket, self.test_dir)
     self.assertTrue(result)
 
-    # Remove second file
+    # Remove the second test file locally
     os.remove(self.test_dir + '/' + self.test_file + '2')
 
 
