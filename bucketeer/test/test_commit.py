@@ -34,11 +34,13 @@ class BuckeeterTest(unittest.TestCase):
 
     return
 
-  def check_file_uploaded(self, bucket_name, file_name):
+  def check_file_on_s3(self, bucket_name, file_name):
+    # Get the file object from s3
     bucket = self.connection.get_bucket(bucket_name)
     s3_file = bucket.get_key(file_name)
 
-    return s3_file.name == file_name
+    # True if it exists on s3, False if it does not
+    return s3_file.exists()
 
   def remove_bucket(self, bucket_name):
     # Delete all files in the bucket
@@ -54,7 +56,7 @@ class BuckeeterTest(unittest.TestCase):
 
   def test_new_file_upload_to_existing_bucket(self):
     result = commit.commit_to_s3(self.existing_bucket, self.test_dir)
-    self.assertTrue(result)
+    self.assertTrue(self.check_file_on_s3(self.existing_bucket, self.test_file))
 
   def test_new_file_upload_to_new_bucket(self):
     result = commit.commit_to_s3(self.new_bucket, self.test_dir)
