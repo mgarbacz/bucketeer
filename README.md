@@ -1,7 +1,7 @@
 Bucketeer
 ========
 
-Syncs a directory to a bucket in Amazon's S3 storage
+Syncs a local directory to a bucket in Amazon's S3
 
 
 ###Usage
