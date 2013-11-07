@@ -1,9 +1,9 @@
 """
-    s3-committer is a python module that commits your files to Amazon's
-    S3 storage.
+    Bucketeer is a python module that syncs a local directory with
+    Amazon's S3
 """
 
 __version__ = '0.0.1'
-__project__ = 's3-committer'
+__project__ = 'bucketeer'
 __author__ = 'Michal Garbacz <mich.garbacz+dev@gmail.com>'
 __license__ = 'MIT'
