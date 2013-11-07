@@ -1,6 +1,5 @@
 """
-    Bucketeer is a python module that syncs a local directory with
-    Amazon's S3
+    Bucketeer is a python module that syncs a local directory with Amazon's S3
 """
 
 __version__ = '0.0.1'
