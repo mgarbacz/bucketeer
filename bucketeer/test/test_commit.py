@@ -86,6 +86,29 @@ class BuckeeterTest(unittest.TestCase):
     # Remove the second test file locally
     os.remove(self.test_dir + '/' + self.test_file + '2')
 
+  def test_updated_file_upload(self):
+    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+
+    # Check timestamp after original upload
+    bucket = self.connection.get_bucket(self.existing_bucket)
+    s3_file = bucket.get_key(self.test_file)
+    first_upload_time = s3_file.last_modified
+
+    # Modify the file locally
+    local_file = open(self.test_dir + '/' + self.test_file, 'w')
+    local_file.write('This file has been modified\n')
+    local_file.close()
+
+    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+
+    # Check the timestamp after second upload
+    bucket = self.connection.get_bucket(self.existing_bucket)
+    s3_file = bucket.get_key(self.test_file)
+    second_upload_time = s3_file.last_modified
+
+    # True if s3_file was modified, False if not
+    result = second_upload_time > first_upload_time
+    self.assertTrue(result)
 
 if __name__ == '__main__':
   unittest.main(buffer = True)
