@@ -34,22 +34,7 @@ class BuckeeterTest(unittest.TestCase):
 
     return
 
-  def check_file_on_s3(self, bucket_name, file_name):
-    # Get the file object from s3
-    bucket = self.connection.get_bucket(bucket_name)
-    s3_file = bucket.get_key(file_name)
-
-    # True if it exists on s3, False if it does not
-    return s3_file.exists()
-
-  def remove_bucket(self, bucket_name):
-    # Delete all files in the bucket
-    bucket = self.connection.get_bucket(bucket_name)
-    for s3_file in bucket.list():
-      bucket.delete_key(s3_file.key)
-
-    # Delete the bucket
-    self.connection.delete_bucket(bucket_name)
+  ### Test Methods
 
   def test_main(self):
     # True if module loaded successfully, False if not
@@ -124,6 +109,29 @@ class BuckeeterTest(unittest.TestCase):
     # True if file was not modified on s3, False if it has
     result = second_upload_time == first_upload_time
     self.assertTrue(result)
+
+  ###
+
+  ### Helper methods
+
+  def check_file_on_s3(self, bucket_name, file_name):
+    # Get the file object from s3
+    bucket = self.connection.get_bucket(bucket_name)
+    s3_file = bucket.get_key(file_name)
+
+    # True if it exists on s3, False if it does not
+    return s3_file.exists()
+
+  def remove_bucket(self, bucket_name):
+    # Delete all files in the bucket
+    bucket = self.connection.get_bucket(bucket_name)
+    for s3_file in bucket.list():
+      bucket.delete_key(s3_file.key)
+
+    # Delete the bucket
+    self.connection.delete_bucket(bucket_name)
+
+  ###
 
 if __name__ == '__main__':
   unittest.main(buffer = True)
