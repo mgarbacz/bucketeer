@@ -4,9 +4,11 @@ Bucketeer
 Syncs a local directory to a bucket in Amazon's S3
 
 
-###Usage
+Usage
+-----
 
-`python bucketeer/main.py <bucket-name> <directory-name>`
+`python bucketeer/main.py 'bucket-name' 'directory-name'`
 
-###License
+License
+-------
 [MIT License](LICENSE.md)
