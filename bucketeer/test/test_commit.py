@@ -110,5 +110,22 @@ class BuckeeterTest(unittest.TestCase):
     result = second_upload_time > first_upload_time
     self.assertTrue(result)
 
+  def test_not_updated_file_upload(self):
+    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+
+    # Check timestamp after original upload
+    bucket = self.connection.get_bucket(self.existing_bucket)
+    first_upload_time = bucket.get_key(self.test_file).last_modified
+
+    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+
+    # Check timestamp after second upload
+    bucket = self.connection.get_bucket(self.existing_bucket)
+    second_upload_time = bucket.get_key(self.test_file).last_modified
+
+    # True if file was not modified on s3, False if it has
+    result = second_upload_time == first_upload_time
+    self.assertTrue(result)
+
 if __name__ == '__main__':
   unittest.main(buffer = True)
