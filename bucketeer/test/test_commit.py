@@ -86,7 +86,7 @@ class BuckeeterTest(unittest.TestCase):
     commit.commit_to_s3(self.existing_bucket, self.test_dir)
 
     # Let S3 catch up with itself
-    time.sleep(2)
+    time.sleep(3)
 
     # Check the timestamp after second upload
     timestamp_2 = self.check_file_timestamp(self.existing_bucket,
@@ -110,7 +110,7 @@ class BuckeeterTest(unittest.TestCase):
                                             self.test_file)
 
     # Let S3 catch up with itself
-    time.sleep(2)
+    time.sleep(3)
 
     # True if file was not modified on s3, False if it has
     result = timestamp_2 == timestamp_1
