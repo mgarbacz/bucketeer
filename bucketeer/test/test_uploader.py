@@ -1,5 +1,5 @@
 import unittest, boto, os, time
-from bucketeer import commit
+from bucketeer import uploader
 
 class BuckeeterTest(unittest.TestCase):
 
@@ -38,17 +38,17 @@ class BuckeeterTest(unittest.TestCase):
 
   def test_main(self):
     # True if module loaded successfully, False if not
-    self.assertTrue(commit)
+    self.assertTrue(uploader)
 
   def test_new_file_upload_to_existing_bucket(self):
-    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    uploader.upload(self.existing_bucket, self.test_dir)
 
     # True if commit to s3 was successful, False if not
     result = self.check_file_on_s3(self.existing_bucket, self.test_file)
     self.assertTrue(result)
 
   def test_new_file_upload_to_new_bucket(self):
-    commit.commit_to_s3(self.new_bucket, self.test_dir)
+    uploader.upload(self.new_bucket, self.test_dir)
 
     # True if commit to s3 was successful, False if not
     result = self.check_file_on_s3(self.new_bucket, self.test_file)
@@ -61,7 +61,7 @@ class BuckeeterTest(unittest.TestCase):
     # Create a second test file
     open(self.test_dir + '/' + self.test_file + '2', 'w').close()
 
-    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    uploader.upload(self.existing_bucket, self.test_dir)
 
     # Both True if commit to s3 was successful, False if not
     result1 = self.check_file_on_s3(self.existing_bucket, self.test_file)
@@ -72,7 +72,7 @@ class BuckeeterTest(unittest.TestCase):
     os.remove(self.test_dir + '/' + self.test_file + '2')
 
   def test_modified_file_upload(self):
-    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    uploader.upload(self.existing_bucket, self.test_dir)
 
     # Check timestamp after original upload
     timestamp_1 = self.check_file_timestamp(self.existing_bucket,
@@ -83,7 +83,7 @@ class BuckeeterTest(unittest.TestCase):
     local_file.write('This file has been modified\n')
     local_file.close()
 
-    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    uploader.upload(self.existing_bucket, self.test_dir)
 
     # Let S3 catch up with itself
     time.sleep(3)
@@ -97,13 +97,13 @@ class BuckeeterTest(unittest.TestCase):
     self.assertTrue(result)
 
   def test_unmodified_file_upload(self):
-    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    uploader.upload(self.existing_bucket, self.test_dir)
 
     # Check timestamp after original upload
     timestamp_1 = self.check_file_timestamp(self.existing_bucket,
                                             self.test_file)
 
-    commit.commit_to_s3(self.existing_bucket, self.test_dir)
+    uploader.upload(self.existing_bucket, self.test_dir)
 
     # Check timestamp after second upload
     timestamp_2 = self.check_file_timestamp(self.existing_bucket,
