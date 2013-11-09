@@ -1,4 +1,4 @@
-import unittest, boto, os
+import unittest, boto, os, time
 from bucketeer import commit
 
 class BuckeeterTest(unittest.TestCase):
@@ -75,8 +75,8 @@ class BuckeeterTest(unittest.TestCase):
     commit.commit_to_s3(self.existing_bucket, self.test_dir)
 
     # Check timestamp after original upload
-    bucket = self.connection.get_bucket(self.existing_bucket)
-    first_upload_time = bucket.get_key(self.test_file).last_modified
+    timestamp_1 = self.check_file_timestamp(self.existing_bucket,
+                                            self.test_file)
 
     # Modify the file locally
     local_file = open(self.test_dir + '/' + self.test_file, 'w')
@@ -85,29 +85,35 @@ class BuckeeterTest(unittest.TestCase):
 
     commit.commit_to_s3(self.existing_bucket, self.test_dir)
 
+    # Let S3 catch up with itself
+    time.sleep(2)
+
     # Check the timestamp after second upload
-    bucket = self.connection.get_bucket(self.existing_bucket)
-    second_upload_time = bucket.get_key(self.test_file).last_modified
+    timestamp_2 = self.check_file_timestamp(self.existing_bucket,
+                                            self.test_file)
 
     # True if file was modified on s3, False if not
-    result = second_upload_time > first_upload_time
+    result = timestamp_2 > timestamp_1
     self.assertTrue(result)
 
   def test_unmodified_file_upload(self):
     commit.commit_to_s3(self.existing_bucket, self.test_dir)
 
     # Check timestamp after original upload
-    bucket = self.connection.get_bucket(self.existing_bucket)
-    first_upload_time = bucket.get_key(self.test_file).last_modified
+    timestamp_1 = self.check_file_timestamp(self.existing_bucket,
+                                            self.test_file)
 
     commit.commit_to_s3(self.existing_bucket, self.test_dir)
 
     # Check timestamp after second upload
-    bucket = self.connection.get_bucket(self.existing_bucket)
-    second_upload_time = bucket.get_key(self.test_file).last_modified
+    timestamp_2 = self.check_file_timestamp(self.existing_bucket,
+                                            self.test_file)
+
+    # Let S3 catch up with itself
+    time.sleep(2)
 
     # True if file was not modified on s3, False if it has
-    result = second_upload_time == first_upload_time
+    result = timestamp_2 == timestamp_1
     self.assertTrue(result)
 
   ###
@@ -130,6 +136,11 @@ class BuckeeterTest(unittest.TestCase):
 
     # Delete the bucket
     self.connection.delete_bucket(bucket_name)
+
+  def check_file_timestamp(self, bucket_name, file_name):
+    # Return timestamp of last file modification
+    bucket = self.connection.get_bucket(bucket_name)
+    return bucket.get_key(file_name).last_modified
 
   ###
 
