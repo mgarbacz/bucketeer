@@ -15,7 +15,7 @@ def upload(bucket_name, src_folder):
       bucket = connection.create_bucket(bucket_name)
       print 'Bucket ' + bucket_name + ' created.'
 
-    # Iterating over all files in the web-content folder
+    # Iterating over all files in the src folder
     for directory, subdirectories, files in os.walk(src_folder):
       for filename in files:
         upload_file(filename, directory, src_folder, bucket)
