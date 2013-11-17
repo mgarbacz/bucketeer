@@ -18,7 +18,8 @@ class BuckeeterTest(unittest.TestCase):
     os.makedirs(self.test_dir)
 
     # Create test file
-    open(self.test_dir + '/' + self.test_file, 'w').close()
+    path_to_test_file = os.path.join(self.test_dir, self.test_file)
+    open(path_to_test_file, 'w').close()
 
     return
 
@@ -56,7 +57,8 @@ class BuckeeterTest(unittest.TestCase):
 
   def test_multiple_file_upload(self):
     # Create a second test file
-    open(self.test_dir + '/' + self.test_file + '2', 'w').close()
+    path_to_test_file = os.path.join(self.test_dir, self.test_file + '2')
+    open(path_to_test_file, 'w').close()
 
     uploader.upload(self.existing_bucket, self.test_dir)
 
@@ -64,9 +66,6 @@ class BuckeeterTest(unittest.TestCase):
     result1 = self.check_file_on_s3(self.existing_bucket, self.test_file)
     result2 = self.check_file_on_s3(self.existing_bucket, self.test_file + '2')
     self.assertTrue(result1 and result2)
-
-    # Remove the second test file locally
-    os.remove(self.test_dir + '/' + self.test_file + '2')
 
   def test_modified_file_upload(self):
     uploader.upload(self.existing_bucket, self.test_dir)
@@ -76,7 +75,8 @@ class BuckeeterTest(unittest.TestCase):
                                             self.test_file)
 
     # Modify the file locally
-    local_file = open(self.test_dir + '/' + self.test_file, 'w')
+    path_to_test_file = os.path.join(self.test_dir, self.test_file)
+    local_file = open(path_to_test_file, 'w')
     local_file.write('This file has been modified\n')
     local_file.close()
 
@@ -110,7 +110,8 @@ class BuckeeterTest(unittest.TestCase):
   def test_deleted_file_delete(self):
     uploader.upload(self.existing_bucket, self.test_dir)
 
-    os.remove(self.test_dir + '/' + self.test_file)
+    path_to_test_file = os.path.join(self.test_dir, self.test_file)
+    os.remove(path_to_test_file)
 
     uploader.upload(self.existing_bucket, self.test_dir)
 
@@ -118,7 +119,7 @@ class BuckeeterTest(unittest.TestCase):
     s3_file = bucket.get_key(self.test_file)
 
     self.assertTrue(s3_file is None)
-    self.assertFalse(os.path.exists(self.test_dir + '/' + self.test_file))
+    self.assertFalse(os.path.exists(path_to_test_file))
 
   ###
 
