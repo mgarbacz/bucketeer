@@ -110,14 +110,18 @@ class BuckeeterTest(unittest.TestCase):
   def test_deleted_file_delete(self):
     uploader.upload(self.existing_bucket, self.test_dir)
 
+    # Remove the file locally
     path_to_test_file = os.path.join(self.test_dir, self.test_file)
     os.remove(path_to_test_file)
 
+    # Second upload to remove the file
     uploader.upload(self.existing_bucket, self.test_dir)
 
+    # Get the file info from s3
     bucket = self.connection.get_bucket(self.existing_bucket)
     s3_file = bucket.get_key(self.test_file)
 
+    # Ensure the file is gone from s3 and locally
     self.assertTrue(s3_file is None)
     self.assertFalse(os.path.exists(path_to_test_file))
 
