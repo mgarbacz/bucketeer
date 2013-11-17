@@ -1,4 +1,4 @@
-import unittest, boto, os, time
+import unittest, boto, os, time, shutil
 from bucketeer import uploader
 
 class BuckeeterTest(unittest.TestCase):
@@ -26,11 +26,8 @@ class BuckeeterTest(unittest.TestCase):
     # Remove the bucket created for testing
     self.remove_bucket(self.existing_bucket)
 
-    # Remove test file
-    os.remove(self.test_dir + '/' + self.test_file)
-
-    # Remove directory created to house test files
-    os.rmdir(self.test_dir)
+    # Remove directory created to house test files and the files inside it
+    shutil.rmtree(self.test_dir)
 
     return
 
@@ -109,6 +106,19 @@ class BuckeeterTest(unittest.TestCase):
     # True if file was not modified on s3, False if it has
     result = timestamp_2 == timestamp_1
     self.assertTrue(result)
+
+  def test_deleted_file_delete(self):
+    uploader.upload(self.existing_bucket, self.test_dir)
+
+    os.remove(self.test_dir + '/' + self.test_file)
+
+    uploader.upload(self.existing_bucket, self.test_dir)
+
+    bucket = self.connection.get_bucket(self.existing_bucket)
+    s3_file = bucket.get_key(self.test_file)
+
+    self.assertTrue(s3_file is None)
+    self.assertFalse(os.path.exists(self.test_dir + '/' + self.test_file))
 
   ###
 
