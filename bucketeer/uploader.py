@@ -17,6 +17,13 @@ def upload(bucket_name, src_folder):
 
     # Iterating over all files in the src folder
     for directory, subdirectories, files in os.walk(src_folder):
+
+      # Delete each s3 file not present locally
+      for s3_file in bucket.list():
+        if s3_file.key not in files:
+          bucket.delete_key(s3_file.key)
+
+      # Upload each local file in files
       for filename in files:
         upload_file(filename, directory, src_folder, bucket)
 
