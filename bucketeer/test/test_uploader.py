@@ -1,4 +1,4 @@
-import unittest, boto, os, time, shutil
+import unittest, boto, os, time, shutil, ConfigParser
 from bucketeer import uploader
 
 class BuckeeterTest(unittest.TestCase):
@@ -150,6 +150,13 @@ class BuckeeterTest(unittest.TestCase):
     # Return timestamp of last file modification
     bucket = self.connection.get_bucket(bucket_name)
     return bucket.get_key(file_name).last_modified
+
+  def set_config(self):
+    # Create config
+    config = ConfigParser.ConfigParser()
+
+    # Set config values
+    # Write to file
 
   ###
 
