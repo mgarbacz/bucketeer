@@ -1,4 +1,4 @@
-import unittest, boto, os, time, shutil, ConfigParser
+import unittest, boto, os, time, shutil, json
 from bucketeer import uploader
 
 class BuckeeterTest(unittest.TestCase):
@@ -153,7 +153,7 @@ class BuckeeterTest(unittest.TestCase):
 
   def set_config(self):
     # Create config
-    config = ConfigParser.ConfigParser()
+    config = json.dumps({ "bucket": self.existing_bucket, "dir": self.test_dir })
 
     # Set config values
     # Write to file
