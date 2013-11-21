@@ -1,6 +1,12 @@
-import boto, os, hashlib
+import boto, os, hashlib, json
 
-# We want to upload all modified files to the s3 bucket
+# Upload modified files with bucket and directory specified in config.json
+def upload_from_config():
+  config = json.loads(open('config.json').read())
+
+  upload(config['bucket'], config['dir'])
+
+# Upload modified files in src_folder to the s3 bucket named
 def upload(bucket_name, src_folder):
   success = False
 
