@@ -10,6 +10,7 @@ class BuckeeterTest(unittest.TestCase):
     self.test_dir = 'bucketeer_test_dir'
     self.test_file = 'bucketeer_test_file'
     self.connection = boto.connect_s3()
+    self.config_file = 'config.json'
 
     # Create a bucket to test on existing bucket
     self.connection.create_bucket(self.existing_bucket)
@@ -125,6 +126,18 @@ class BuckeeterTest(unittest.TestCase):
     self.assertTrue(s3_file is None)
     self.assertFalse(os.path.exists(path_to_test_file))
 
+  def test_upload_via_config(self):
+    self.set_config()
+
+    # Upload using config for bucket and directory
+    uploader.upload()
+
+    # True if commit to s3 was successful, False if not
+    result = self.check_file_on_s3(self.existing_bucket, self.test_file)
+    self.assertTrue(result)
+
+    os.remove(self.config_file)
+
   ###
 
   ### Helper methods
@@ -153,10 +166,9 @@ class BuckeeterTest(unittest.TestCase):
 
   def set_config(self):
     # Create config
-    config = json.dumps({ "bucket": self.existing_bucket, "dir": self.test_dir })
-
-    # Set config values
-    # Write to file
+    config = { 'bucket': self.existing_bucket, 'dir': self.test_dir }
+    with open(self.config_file, 'w') as outfile:
+      json.dump(config, outfile)
 
   ###
 
