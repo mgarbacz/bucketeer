@@ -1,3 +1,7 @@
+bucketeer 1.1.1, Nov 21 2013
+----------------------------
+* Implemented config.json setting of bucket name and dir name
+
 bucketeer 1.1.0, Nov 18 2013
 ----------------------------
 * Implemented file deletion sync
