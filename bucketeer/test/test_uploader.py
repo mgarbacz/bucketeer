@@ -130,7 +130,7 @@ class BuckeeterTest(unittest.TestCase):
     self.set_config()
 
     # Upload using config for bucket and directory
-    uploader.upload()
+    uploader.upload_from_config()
 
     # True if commit to s3 was successful, False if not
     result = self.check_file_on_s3(self.existing_bucket, self.test_file)
