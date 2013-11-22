@@ -1,7 +1,7 @@
 import unittest, boto, os, time, shutil, json
 from bucketeer import uploader
 
-class BuckeeterTest(unittest.TestCase):
+class BucketeerTest(unittest.TestCase):
 
   def setUp(self):
     # Init variable values
