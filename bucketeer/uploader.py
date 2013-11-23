@@ -27,7 +27,9 @@ def upload(bucket_name, src_folder):
       # Delete each s3 file not present locally
       for s3_file in bucket.list():
         if s3_file.key not in files:
+          print s3_file.key + ' is being deleted from s3...'
           bucket.delete_key(s3_file.key)
+          print s3_file.key + ' has been deleted from s3.'
 
       # Upload each local file in files
       for filename in files:
