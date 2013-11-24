@@ -1,6 +1,7 @@
-bucketeer 1.1.1, Nov 21 2013
+bucketeer 1.1.1, Nov 24 2013
 ----------------------------
 * Implemented config.json setting of bucket name and dir name
+* Fix bug with file deletion running in incorrect loop
 
 bucketeer 1.1.0, Nov 18 2013
 ----------------------------
