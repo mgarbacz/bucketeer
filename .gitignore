@@ -3,6 +3,7 @@
 MANIFEST
 dist
 Bucketeer.egg-info
+build
 
 # Vim swap file
 *.swp
