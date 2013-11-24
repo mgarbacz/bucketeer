@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
   name='Bucketeer',
-  version='1.0.0',
+  version='1.1.1',
   author='Michal Garbacz',
   author_email='mich.garbacz+dev@gmail.com',
   packages=['bucketeer',],
