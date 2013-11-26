@@ -21,15 +21,7 @@ def upload(bucket_name, src_folder):
       bucket = connection.create_bucket(bucket_name)
       print 'Bucket ' + bucket_name + ' created.'
 
-    # Delete each s3 file not present locally
-    for s3_file in bucket.list():
-      try:
-        with open(os.path.join(src_folder, s3_file.key)):
-          print s3_file.key + ' exists locally.'
-      except IOError:
-        print s3_file.key + ' is being deleted from s3...'
-        bucket.delete_key(s3_file.key)
-        print s3_file.key + ' has been deleted from s3.'
+    delete_files(src_folder, bucket)
 
     # Iterating over all files in the src folder
     for directory, subdirectories, files in os.walk(src_folder):
@@ -79,3 +71,15 @@ def upload_file(filename, directory, src_folder, bucket):
 
   # Will print after update or if no update was required
   print filename + ' is up to date.'
+
+def delete_files(src_folder, bucket):
+  # Delete each s3 file not present locally
+  for s3_file in bucket.list():
+    try:
+      with open(os.path.join(src_folder, s3_file.key)):
+        print s3_file.key + ' exists locally.'
+    except IOError:
+      print s3_file.key + ' is being deleted from s3...'
+      bucket.delete_key(s3_file.key)
+      print s3_file.key + ' has been deleted from s3.'
+
