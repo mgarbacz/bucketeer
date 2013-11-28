@@ -33,9 +33,9 @@ def upload(bucket_name, src_folder):
     print e
 
   if success:
-    print('Changes committed')
+    print('Changes uploaded.')
   else:
-    print('Changes not committed')
+    print('Changes not uploaded.')
 
   return success
 
