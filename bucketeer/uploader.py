@@ -1,15 +1,10 @@
-import boto, os, hashlib, json
-
-# Upload modified files with bucket and directory specified in config.json
-def upload_from_config():
-  config = json.loads(open('config.json').read())
-
-  upload(config['bucket'], config['dir'])
+import boto, os, hashlib
 
 # Upload modified files in src_folder to the s3 bucket named
 def upload(bucket_name, src_folder):
   success = False
 
+  print 'Attempting to upload ' + src_folder + ' to ' + bucket_name
   try:
     # Requires S3 creds, which are set as environment variables
     connection = boto.connect_s3();
