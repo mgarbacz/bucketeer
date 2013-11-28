@@ -5,9 +5,9 @@ import sys, json
 def main(bucket = False, directory = False):
   if (not bucket and not directory):
     try:
-      config = json.loads(open('config.json').read())
+      config = json.loads(open('bucketeer.json').read())
       print 'Configuration file found.'
-      uploader.upload(config['bucket'], config['dir'])
+      uploader.upload(config['bucket'], config['directory'])
     except IOError:
       print 'Configuration file not found. Nothing to do...'
   else:

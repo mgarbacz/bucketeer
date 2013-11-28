@@ -9,11 +9,11 @@ Usage
 
 `python -m bucketeer '<bucket-name>' '<directory-name>'`
 
-or create a `config.json` file and add the bucket name and directory name:
+or create a `bucketeer.json` file and add the bucket name and directory name:
 
     {
       "bucket": "<bucket-name>",
-      "dir": "<directory-name>"
+      "directory": "<directory-name>"
     }
 
 then you can just `python -m bucketeer`
