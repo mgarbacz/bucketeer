@@ -1,6 +1,6 @@
 #! /usr/bin/env python
-from bucketeer import uploader
 import sys, json
+from bucketeer import uploader
 
 def main(bucket = False, directory = False):
   if bucket and directory:
