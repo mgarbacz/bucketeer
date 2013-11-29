@@ -4,7 +4,7 @@ import boto, os, hashlib
 def upload(bucket_name, src_folder):
   success = False
 
-  print 'Attempting to upload ' + src_folder + ' to ' + bucket_name
+  print 'Attempting to upload %s to %s' % (src_folder, bucket_name)
   try:
     # Requires S3 creds, which are set as environment variables
     connection = boto.connect_s3();
@@ -12,9 +12,9 @@ def upload(bucket_name, src_folder):
 
     if bucket == None:
       # Create the bucket if we don't have it
-      print 'Bucket ' + bucket_name + ' not found. Creating...'
+      print 'Bucket %s not found. Creating...' % bucket_name
       bucket = connection.create_bucket(bucket_name)
-      print 'Bucket ' + bucket_name + ' created.'
+      print 'Bucket %s created.' % bucket_name
 
     delete_files(src_folder, bucket)
 
@@ -33,9 +33,9 @@ def upload(bucket_name, src_folder):
     print e
 
   if success:
-    print('Changes uploaded.')
+    print 'Changes uploaded.'
   else:
-    print('Changes not uploaded.')
+    print 'Changes not uploaded.'
 
   return success
 
@@ -58,23 +58,23 @@ def upload_file(filename, directory, src_folder, bucket):
 
   # If the hashes are different, we need to upload the file
   if local_hash != s3_hash:
-    print filename + ' is uploading...'
+    print  '%s is uploading...' % filename
     key_file = boto.s3.key.Key(bucket)
     key_file.key = s3_file_path
     key_file.set_contents_from_filename(local_file_path)
     key_file.make_public()
 
   # Will print after update or if no update was required
-  print filename + ' is up to date.'
+  print '%s is up to date.' % filename
 
 def delete_files(src_folder, bucket):
   # Delete each s3 file not present locally
   for s3_file in bucket.list():
     try:
       with open(os.path.join(src_folder, s3_file.key)):
-        print s3_file.key + ' exists locally.'
+        print '%s exists locally.' % s3_file.key
     except IOError:
-      print s3_file.key + ' is being deleted from s3...'
+      print '%s is being deleted from s3...' % s3_file.key
       bucket.delete_key(s3_file.key)
-      print s3_file.key + ' has been deleted from s3.'
+      print '%s has been deleted from s3.' % s3_file.key
 
