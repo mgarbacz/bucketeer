@@ -1,7 +1,7 @@
-import unittest, boto, os, time, shutil, json
+import unittest, boto, os, time, shutil
 from bucketeer import uploader
 
-class BucketeerTest(unittest.TestCase):
+class UploaderTest(unittest.TestCase):
 
   def setUp(self):
     # Init variable values
@@ -10,7 +10,6 @@ class BucketeerTest(unittest.TestCase):
     self.test_dir = 'bucketeer_test_dir'
     self.test_file = 'bucketeer_test_file'
     self.connection = boto.connect_s3()
-    self.config_file = 'config.json'
 
     # Create a bucket to test on existing bucket
     self.connection.create_bucket(self.existing_bucket)
@@ -126,18 +125,6 @@ class BucketeerTest(unittest.TestCase):
     self.assertTrue(s3_file is None)
     self.assertFalse(os.path.exists(path_to_test_file))
 
-  def test_upload_via_config(self):
-    self.set_config()
-
-    # Upload using config for bucket and directory
-    uploader.upload_from_config()
-
-    # True if commit to s3 was successful, False if not
-    result = self.check_file_on_s3(self.existing_bucket, self.test_file)
-    self.assertTrue(result)
-
-    os.remove(self.config_file)
-
   ###
 
   ### Helper methods
@@ -163,12 +150,6 @@ class BucketeerTest(unittest.TestCase):
     # Return timestamp of last file modification
     bucket = self.connection.get_bucket(bucket_name)
     return bucket.get_key(file_name).last_modified
-
-  def set_config(self):
-    # Create config
-    config = { 'bucket': self.existing_bucket, 'dir': self.test_dir }
-    with open(self.config_file, 'w') as outfile:
-      json.dump(config, outfile)
 
   ###
 
