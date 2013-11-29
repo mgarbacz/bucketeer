@@ -50,10 +50,11 @@ class UploaderTest(unittest.TestCase):
 
     # True if commit to s3 was successful, False if not
     result = self.check_file_on_s3(self.new_bucket, self.test_file)
-    self.assertTrue(result)
 
     # Tear down the newly created bucket
     self.remove_bucket(self.new_bucket)
+
+    self.assertTrue(result)
 
   def test_multiple_file_upload(self):
     # Create a second test file
