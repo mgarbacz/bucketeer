@@ -13,7 +13,7 @@ def main(bucket = False, directory = False):
     except IOError:
       print 'Configuration file not found. Nothing to do...'
     except KeyError as e:
-      print 'Configuration file incorrect.', e
+      print 'Configuration file incorrect. Missing:', e
 
   print 'Task done.'
 
