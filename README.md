@@ -7,7 +7,7 @@ Syncs a local directory to a bucket in Amazon's S3
 Usage
 -----
 
-`python -m bucketeer '<bucket-name>' '<directory-name>'`
+    python -m bucketeer <bucket-name> <directory-name>
 
 or create a `bucketeer.json` file and add the bucket name and directory name:
 
@@ -18,7 +18,7 @@ or create a `bucketeer.json` file and add the bucket name and directory name:
 
 then you can just `python -m bucketeer`
 
-Note: brackets (< >) signify your custom input and shouldn't be included
+_Note: `<` and `>` signify your custom input and shouldn't be included_
 
 License
 -------
