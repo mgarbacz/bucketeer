@@ -1,4 +1,4 @@
-import unittest, boto, os, time, shutil
+import unittest, boto, os, time, shutil, json
 from bucketeer import uploader
 
 class UploaderTest(unittest.TestCase):
@@ -10,6 +10,9 @@ class UploaderTest(unittest.TestCase):
     self.test_dir = 'bucketeer_test_dir'
     self.test_file = 'bucketeer_test_file'
     self.connection = boto.connect_s3()
+    self.bucket_keyword = 'bucket'
+    self.directory_keyword = 'directory'
+    self.config_file = 'bucketeer.json'
 
     # Create a bucket to test on existing bucket
     self.connection.create_bucket(self.existing_bucket)
@@ -126,6 +129,21 @@ class UploaderTest(unittest.TestCase):
     self.assertTrue(s3_file is None)
     self.assertFalse(os.path.exists(path_to_test_file))
 
+  def test_upload_with_proper_config(self):
+    self.set_config()
+    # False for arguments signifies no command line arguments
+    uploader.upload(False, False)
+
+    # Tear down config file
+    self.remove_config()
+
+    # True if commit to s3 was successful, False if not
+    result = self.check_file_on_s3(self.existing_bucket, self.test_file)
+    self.assertTrue(result)
+
+  def test_upload_with_bad_config(self):
+    self.assertTrue(False)
+
   ###
 
   ### Helper methods
@@ -151,6 +169,18 @@ class UploaderTest(unittest.TestCase):
     # Return timestamp of last file modification
     bucket = self.connection.get_bucket(bucket_name)
     return bucket.get_key(file_name).last_modified
+
+  def set_config(self):
+    # Create config
+    config = dict([
+      (self.bucket_keyword, self.existing_bucket),
+      (self.directory_keyword, self.test_dir)
+    ])
+    with open(self.config_file, 'w') as outfile:
+      json.dump(config, outfile)
+
+  def remove_config(self):
+    os.remove(self.config_file)
 
   ###
 
